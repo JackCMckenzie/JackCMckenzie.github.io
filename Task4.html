@@ -1,0 +1,79 @@
+<input class="input" type="file" onchange="readFile(this)">
+
+<pre id="output"></pre>
+
+<!-- Script for analysing uploaded file -->
+<script>
+// Function to sort array's keys according to their value
+function sortByValue(obj) {
+    var keys = keys = Object.keys(obj);
+    return keys.sort(function(a,b){return obj[b]-obj[a]});
+}
+
+// Function to read uploaded file
+function readFile(input) {
+	let file = input.files[0];
+	let reader = new FileReader();
+
+	reader.readAsText(file);
+
+	// When file loaded
+	reader.onload = function() {
+		// Format result
+		var res = reader.result.split("\r\n");
+		
+		// Count occurrences
+		const occurrences = arr => arr.reduce((obj, e) => {
+			obj[e] = (obj[e] || 0) + 1;
+			return obj;
+		}, {});
+		
+		// Sort to find most common
+		var sorted_occur = sortByValue(occurrences(res))
+		
+		// Show to user
+		for (let i = 0; i < 5; i++) {
+			document.getElementById("output").innerHTML += sorted_occur[i] + '\n';
+		}
+	};
+}
+</script>
+
+<!-- CSS Styling for better upload button -->
+<style>
+.input {
+  color: transparent;
+}
+.input::-webkit-file-upload-button {
+  visibility: hidden;
+}
+.input::before {
+  content: 'Upload a file';
+  color: black;
+  display: inline-block;
+  background: -webkit-linear-gradient(top, #f9f9f9, #e3e3e3);
+  border: 1px solid #999;
+  border-radius: 3px;
+  padding: 5px 8px;
+  outline: none;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  cursor: pointer;
+  text-shadow: 1px 1px #fff;
+  font-weight: 700;
+  font-size: 10pt;
+}
+.input:hover::before {
+  border-color: black;
+}
+.input:active {
+  outline: 0;
+}
+.input:active::before {
+  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9); 
+}
+
+body {
+  padding: 20px;
+}
+</style>
